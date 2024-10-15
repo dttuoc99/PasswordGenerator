@@ -1,4 +1,4 @@
-# PasswordGenerator-simple-
+# PasswordGenerator(v1.0)
 I want to create a simple password generator tools which will generate a wordlist of passwords for me to spray during bug hunting :)))
 
 ## Usage
@@ -17,4 +17,43 @@ options:
   --limit LIMIT         Limit number of generated outputs (default: 100)
   --mode {uppercase,lowercase,random}
                         Switch between modes (uppercase, lowercase, or random)
+```
+
+## Example
+```
+❯ python3 password-generator.py --domain example123group --num 123 --special --mode uppercase --limit 10
+EXAMPLE123GROUP$123
+EXAMPLE123GROUP@123
+EXAMPLE123GROUP&123
+EXAMPLE123GROUP%123
+EXAMPLE123GROUP#123
+EXAMPLE123GROUP#123
+EXAMPLE123GROUP&123
+EXAMPLE123GROUP&123
+EXAMPLE123GROUP$123
+EXAMPLE123GROUP@123
+
+❯ python3 password-generator.py --domain example123group --num 123 --special --limit 10
+example123group@123
+example123group%123
+example123group#123
+example123group&123
+example123group&123
+example123group#123
+example123group%123
+example123group$123
+example123group&123
+example123group%123
+
+❯ python3 password-generator.py --domain example123group --num 123 --special --mode random --limit 10
+eXAMPlE123GrOUp#123
+eXampLe123GROup&123
+examPle123GrOuP%123
+ExaMpLE123GrouP@123
+ExAMpLE123gRoUP&123
+exaMple123GROUp&123
+EXAmple123grouP$123
+exAmplE123groUP%123
+eXaMpLE123gRoup%123
+exAMpLE123GRouP@123
 ```
