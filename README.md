@@ -2,6 +2,7 @@
 I want to create a simple password generator tools which will generate a wordlist of passwords for me to spray during bug hunting :)))
 
 ## Usage
+```
 ❯ python3 password-generator.py --help
 usage: password-generator.py [-h] --domain DOMAIN --num NUM [--special] [--limit LIMIT]
                              [--mode {uppercase,lowercase,random}]
@@ -16,3 +17,4 @@ options:
   --limit LIMIT         Limit number of generated outputs (default: 100)
   --mode {uppercase,lowercase,random}
                         Switch between modes (uppercase, lowercase, or random)
+```
