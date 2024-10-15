@@ -3,6 +3,7 @@
 import argparse
 import random
 import string
+import itertools
 
 def parse_arguments():
     """
@@ -41,28 +42,25 @@ def generate_variations(domain, numbers, add_special, limit):
     special_characters = ['@', '#', '$', '%', '&'] if add_special else ['']
     variations = []
 
-    # Case variations for the domain string
-    case_variants = [domain.lower(), domain.upper(), domain.capitalize(), domain.swapcase()]
-
-    for case_variant in case_variants:
-        for number in numbers:
-            for special in special_characters:
-                # Form the string: domain + special + number
-                generated_string = f"{case_variant}{special}{number}"
-                variations.append(generated_string)
+    for number in numbers:
+        for special in special_characters:
+            # Form the string: domain + special + number
+            generated_string = f"{domain}{special}{number}"
+            variations.append(generated_string)
 
     # Shuffle the result to add randomness
     random.shuffle(variations)
     
     return variations[:limit]
 
-def randomize_string_case(s):
+def generate_all_case_combinations(domain):
     """
-    Randomly convert each character in the string to uppercase or lowercase.
+    Generate all possible combinations of uppercase and lowercase for each character in the domain.
     """
-    return ''.join(random.choice([char.upper(), char.lower()]) for char in s)
+    combinations = list(itertools.product(*([char.lower(), char.upper()] if char.isalpha() else [char] for char in domain)))
+    return [''.join(combo) for combo in combinations]
 
-def apply_mode(results, mode):
+def apply_mode(results, mode, domain):
     """
     Apply mode to the results: either convert all to uppercase, lowercase, or randomly case-mix each string.
     """
@@ -71,7 +69,14 @@ def apply_mode(results, mode):
     elif mode == 'lowercase':
         return [result.lower() for result in results]
     elif mode == 'random':
-        return [randomize_string_case(result) for result in results]
+        # Apply all possible case combinations for the domain
+        case_combinations = generate_all_case_combinations(domain)
+        random_results = []
+        for result in results:
+            for case_variant in case_combinations:
+                # Replace the domain part of the result with each case variant
+                random_results.append(result.replace(domain, case_variant, 1))
+        return random_results
     return results
 
 def main():
@@ -89,14 +94,18 @@ def main():
     # Argument 4: Limit
     limit = args.limit
 
+    # Generate base combinations (before applying case modes)
+    results = generate_variations(domain, numbers, add_special, limit)
+
     # Argument 5: Mode
     mode = args.mode
 
-    # Generate combinations
-    results = generate_variations(domain, numbers, add_special, limit)
-
     # Apply mode to results
-    results = apply_mode(results, mode)
+    results = apply_mode(results, mode, domain)
+
+    # Shuffle and limit the results
+    random.shuffle(results)
+    results = results[:limit]
 
     # Output the results
     for result in results:
